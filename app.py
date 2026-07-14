@@ -13,6 +13,11 @@ ENCODER = joblib.load(ROOT / "models" / "label_encoder.pkl")
 st.set_page_config(page_title="LungCare ML", page_icon="🫁", layout="wide")
 st.markdown("""<style>
 .stApp{background:linear-gradient(145deg,#f1f8ff,#f3fffb);color:#102a43}
+.stApp label,
+.stApp [data-testid="stWidgetLabel"] p,
+.stApp [data-testid="stWidgetLabel"] span,
+.stApp [data-testid="stMarkdownContainer"] p{color:#102a43!important}
+.stApp [data-testid="stMetricLabel"] p{color:#486581!important}
 .hero{padding:2.2rem;border-radius:24px;background:linear-gradient(125deg,#082d4e,#08766e);color:white;margin-bottom:2rem}
 .hero h1{font-size:3rem;margin:0}.hero p{color:#d8ebee;font-size:1.1rem}.badge{display:inline-block;padding:.4rem .8rem;border-radius:999px;background:#ffffff1c}
 .result{padding:1.5rem;border-radius:18px;background:white;border:2px solid #16a594;margin-top:1.5rem}
