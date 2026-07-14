@@ -1,0 +1,369 @@
+{
+  "dataset": {
+    "rows": 1000,
+    "features": 23,
+    "columns": [
+      "index",
+      "Patient Id",
+      "Age",
+      "Gender",
+      "Air Pollution",
+      "Alcohol use",
+      "Dust Allergy",
+      "OccuPational Hazards",
+      "Genetic Risk",
+      "chronic Lung Disease",
+      "Balanced Diet",
+      "Obesity",
+      "Smoking",
+      "Passive Smoker",
+      "Chest Pain",
+      "Coughing of Blood",
+      "Fatigue",
+      "Weight Loss",
+      "Shortness of Breath",
+      "Wheezing",
+      "Swallowing Difficulty",
+      "Clubbing of Finger Nails",
+      "Frequent Cold",
+      "Dry Cough",
+      "Snoring",
+      "Level"
+    ],
+    "missing": 0,
+    "duplicates": 0,
+    "class_distribution": {
+      "High": 365,
+      "Medium": 332,
+      "Low": 303
+    }
+  },
+  "features": [
+    "Age",
+    "Gender",
+    "Air Pollution",
+    "Alcohol use",
+    "Dust Allergy",
+    "OccuPational Hazards",
+    "Genetic Risk",
+    "chronic Lung Disease",
+    "Balanced Diet",
+    "Obesity",
+    "Smoking",
+    "Passive Smoker",
+    "Chest Pain",
+    "Coughing of Blood",
+    "Fatigue",
+    "Weight Loss",
+    "Shortness of Breath",
+    "Wheezing",
+    "Swallowing Difficulty",
+    "Clubbing of Finger Nails",
+    "Frequent Cold",
+    "Dry Cough",
+    "Snoring"
+  ],
+  "classes": [
+    "High",
+    "Low",
+    "Medium"
+  ],
+  "models": {
+    "Logistic Regression": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "report": {
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 73.0
+        },
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 61.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 66.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          73,
+          0,
+          0
+        ],
+        [
+          0,
+          61,
+          0
+        ],
+        [
+          0,
+          0,
+          66
+        ]
+      ],
+      "file": "logistic_regression.pkl"
+    },
+    "Decision Tree": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "report": {
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 73.0
+        },
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 61.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 66.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          73,
+          0,
+          0
+        ],
+        [
+          0,
+          61,
+          0
+        ],
+        [
+          0,
+          0,
+          66
+        ]
+      ],
+      "file": "decision_tree.pkl"
+    },
+    "Random Forest": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "report": {
+        "High": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 73.0
+        },
+        "Low": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 61.0
+        },
+        "Medium": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 66.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          73,
+          0,
+          0
+        ],
+        [
+          0,
+          61,
+          0
+        ],
+        [
+          0,
+          0,
+          66
+        ]
+      ],
+      "file": "random_forest.pkl"
+    }
+  },
+  "ranges": {
+    "Age": {
+      "min": 14,
+      "max": 73
+    },
+    "Gender": {
+      "min": 1,
+      "max": 2
+    },
+    "Air Pollution": {
+      "min": 1,
+      "max": 8
+    },
+    "Alcohol use": {
+      "min": 1,
+      "max": 8
+    },
+    "Dust Allergy": {
+      "min": 1,
+      "max": 8
+    },
+    "OccuPational Hazards": {
+      "min": 1,
+      "max": 8
+    },
+    "Genetic Risk": {
+      "min": 1,
+      "max": 7
+    },
+    "chronic Lung Disease": {
+      "min": 1,
+      "max": 7
+    },
+    "Balanced Diet": {
+      "min": 1,
+      "max": 7
+    },
+    "Obesity": {
+      "min": 1,
+      "max": 7
+    },
+    "Smoking": {
+      "min": 1,
+      "max": 8
+    },
+    "Passive Smoker": {
+      "min": 1,
+      "max": 8
+    },
+    "Chest Pain": {
+      "min": 1,
+      "max": 9
+    },
+    "Coughing of Blood": {
+      "min": 1,
+      "max": 9
+    },
+    "Fatigue": {
+      "min": 1,
+      "max": 9
+    },
+    "Weight Loss": {
+      "min": 1,
+      "max": 8
+    },
+    "Shortness of Breath": {
+      "min": 1,
+      "max": 9
+    },
+    "Wheezing": {
+      "min": 1,
+      "max": 8
+    },
+    "Swallowing Difficulty": {
+      "min": 1,
+      "max": 8
+    },
+    "Clubbing of Finger Nails": {
+      "min": 1,
+      "max": 9
+    },
+    "Frequent Cold": {
+      "min": 1,
+      "max": 7
+    },
+    "Dry Cough": {
+      "min": 1,
+      "max": 7
+    },
+    "Snoring": {
+      "min": 1,
+      "max": 7
+    }
+  },
+  "split": {
+    "train": 800,
+    "test": 200,
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "best_model": "Logistic Regression",
+  "best_accuracy": 1.0,
+  "comparison": [
+    {
+      "model": "Logistic Regression",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    {
+      "model": "Decision Tree",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  ]
+}
