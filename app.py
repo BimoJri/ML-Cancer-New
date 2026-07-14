@@ -1,75 +1,47 @@
-"""Aplikasi Flask untuk prediksi tingkat risiko kanker paru-paru."""
+"""Versi Streamlit Cloud dari LungCare ML."""
 from pathlib import Path
 import json
 import joblib
 import pandas as pd
-from flask import Flask, flash, render_template, request
+import streamlit as st
 
 ROOT = Path(__file__).resolve().parent
-app = Flask(__name__)
-app.secret_key = "lung-risk-local-app"
-DATA = pd.read_csv(ROOT / "dataset" / "cancer patient data sets.csv")
-META = json.loads((ROOT / "models" / "metadata.json").read_text(encoding="utf-8"))
+META = json.loads((ROOT / "models" / "metadata.json").read_text())
 MODEL = joblib.load(ROOT / "models" / "best_model.pkl")
 ENCODER = joblib.load(ROOT / "models" / "label_encoder.pkl")
 
-RECOMMENDATIONS = {
-    "Low": "Pertahankan gaya hidup sehat, hindari rokok dan asap rokok, serta lakukan pemeriksaan kesehatan secara berkala.",
-    "Medium": "Kurangi faktor risiko, perbaiki pola hidup, dan konsultasikan kondisi Anda dengan dokter untuk evaluasi lebih lanjut.",
-    "High": "Segera lakukan pemeriksaan medis lebih lanjut, berkonsultasi dengan dokter spesialis paru, dan pertimbangkan CT Scan sesuai anjuran tenaga medis.",
-}
+st.set_page_config(page_title="LungCare ML", page_icon="🫁", layout="wide")
+st.markdown("""<style>
+.stApp{background:linear-gradient(145deg,#f1f8ff,#f3fffb);color:#102a43}
+.hero{padding:2.2rem;border-radius:24px;background:linear-gradient(125deg,#082d4e,#08766e);color:white;margin-bottom:2rem}
+.hero h1{font-size:3rem;margin:0}.hero p{color:#d8ebee;font-size:1.1rem}.badge{display:inline-block;padding:.4rem .8rem;border-radius:999px;background:#ffffff1c}
+.result{padding:1.5rem;border-radius:18px;background:white;border:2px solid #16a594;margin-top:1.5rem}
+</style>""", unsafe_allow_html=True)
+st.markdown("""<div class="hero"><span class="badge">✦ Deteksi dini berbasis machine learning</span>
+<h1>🫁 LungCare ML</h1><p>Prediksi edukatif tingkat risiko kanker paru-paru berdasarkan 23 indikator kesehatan dan gaya hidup.</p></div>""", unsafe_allow_html=True)
 
-@app.context_processor
-def shared():
-    return {"meta": META}
+c1,c2,c3,c4=st.columns(4)
+for col,value,label in zip((c1,c2,c3,c4),(META['dataset']['rows'],META['dataset']['features'],len(META['models']),f"{META['best_accuracy']:.0%}"),("Data pasien","Fitur","Model","Akurasi terbaik")):
+    col.metric(label,value)
 
-@app.route("/")
-def home(): return render_template("home.html", active="home")
+st.subheader("Masukkan data pasien")
+st.caption("Skala 1 menunjukkan tingkat rendah; nilai maksimum menunjukkan tingkat tertinggi pada dataset.")
+values={}
+cols=st.columns(3)
+for i,feature in enumerate(META["features"]):
+    limits=META["ranges"][feature]
+    with cols[i%3]:
+        if feature=="Age": values[feature]=st.number_input("Age / Usia",limits["min"],limits["max"],40)
+        elif feature=="Gender": values[feature]=st.selectbox("Gender",[1,2],format_func=lambda x:"Male" if x==1 else "Female")
+        else: values[feature]=st.slider(feature,limits["min"],limits["max"],limits["min"])
 
-@app.route("/dashboard")
-def dashboard(): return render_template("dashboard.html", active="dashboard")
-
-@app.route("/dataset")
-def dataset():
-    stats = DATA.drop(columns=["index"]).describe().round(2).to_html(classes="table table-hover", border=0)
-    preview = DATA.head(10).to_html(classes="table table-hover", border=0, index=False)
-    return render_template("dataset.html", active="dataset", preview=preview, stats=stats)
-
-@app.route("/preprocessing")
-def preprocessing(): return render_template("preprocessing.html", active="preprocessing")
-
-@app.route("/training")
-def training(): return render_template("training.html", active="training")
-
-@app.route("/evaluation")
-def evaluation(): return render_template("evaluation.html", active="evaluation")
-
-@app.route("/visualization")
-def visualization(): return render_template("visualization.html", active="visualization")
-
-@app.route("/predict", methods=["GET", "POST"])
-def predict():
-    result = None
-    if request.method == "POST":
-        try:
-            values = {feature: int(request.form[feature]) for feature in META["features"]}
-            for feature, value in values.items():
-                limits = META["ranges"][feature]
-                if not limits["min"] <= value <= limits["max"]:
-                    raise ValueError(f"{feature} harus antara {limits['min']}–{limits['max']}.")
-            row = pd.DataFrame([values], columns=META["features"])
-            encoded = int(MODEL.predict(row)[0])
-            probabilities = MODEL.predict_proba(row)[0]
-            label = str(ENCODER.inverse_transform([encoded])[0])
-            result = {"label": label, "recommendation": RECOMMENDATIONS[label],
-                      "probabilities": sorted(zip(ENCODER.classes_, probabilities * 100),
-                                              key=lambda item: item[1], reverse=True)}
-        except (KeyError, ValueError) as exc:
-            flash(f"Input tidak valid: {exc}", "danger")
-    return render_template("predict.html", active="predict", result=result, values=request.form)
-
-@app.errorhandler(404)
-def not_found(error): return render_template("404.html"), 404
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if st.button("✦ Prediksi Sekarang",type="primary",use_container_width=True):
+    row=pd.DataFrame([values],columns=META["features"])
+    encoded=int(MODEL.predict(row)[0]); probs=MODEL.predict_proba(row)[0]*100
+    label=str(ENCODER.inverse_transform([encoded])[0])
+    advice={"Low":"Pertahankan gaya hidup sehat, hindari rokok, dan lakukan pemeriksaan berkala.","Medium":"Kurangi faktor risiko, perbaiki pola hidup, dan konsultasikan dengan dokter.","High":"Segera lakukan pemeriksaan medis lanjutan dan konsultasi dengan dokter spesialis paru."}
+    st.markdown(f'<div class="result"><h2>Hasil: Risiko {label}</h2><p>{advice[label]}</p></div>',unsafe_allow_html=True)
+    st.subheader("Probabilitas kelas")
+    for cls,prob in sorted(zip(ENCODER.classes_,probs),key=lambda x:x[1],reverse=True):
+        st.write(f"**{cls} — {prob:.2f}%**"); st.progress(float(prob/100))
+    st.warning("Hasil ini bersifat edukatif dan bukan diagnosis medis.")
